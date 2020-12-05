@@ -6,5 +6,7 @@ int main(void) {
     return 1;
   }
   spawn_process("ps2");
+  grant_ioport(0x60);
+  grant_ioport(0x64);
   start_process();
 }
