@@ -1,5 +1,5 @@
 CC:=x86_64-os-gcc
-CFLAGS:=-Wall -Wextra -Werror -O2 -MMD -Iinclude
+CFLAGS:=-Wall -Wextra -Werror -O2
 
 CFILES:=main.c
 OFILES:=$(patsubst %.c, %.o, $(CFILES))
@@ -11,7 +11,6 @@ install: all
 	mkdir -p $(DESTDIR)/boot
 	cp init $(DESTDIR)/boot
 format:
-	clang-format -i $(CFILES) $(wildcard include/*.h)
+	clang-format -i $(CFILES)
 clean:
-	rm -f $(OFILES) $(OFILES:.o=.d) init
--include $(OFILES:.o=.d)
+	rm -f $(OFILES) init
