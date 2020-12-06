@@ -8,5 +8,6 @@ int main(void) {
   spawn_process("ps2");
   grant_ioport(0x60);
   grant_ioport(0x64);
+  register_irq(1);
   start_process();
 }
