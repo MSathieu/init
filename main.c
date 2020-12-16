@@ -5,6 +5,8 @@ int main(void) {
   if (getpid() != 1) {
     return 1;
   }
+  spawn_process("ipcd");
+  start_process();
   spawn_process("kbdd");
   start_process();
   spawn_process("ps2d");
