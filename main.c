@@ -10,9 +10,11 @@ int main(void) {
   grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_CAPS);
   start_process();
   spawn_process("kbdd");
-  grant_capability(CAP_NAMESPACE_IPCD, CAP_IPCD_REGISTER);
+  grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_CAPS);
+  grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
   start_process();
   spawn_process("ps2d");
+  grant_capability(CAP_NAMESPACE_SERVERS, CAP_KBDD_SEND_KEYPRESS);
   grant_ioport(0x60);
   grant_ioport(0x64);
   register_irq(1);
