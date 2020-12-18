@@ -9,6 +9,9 @@ int main(void) {
   spawn_process("ipcd");
   grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_CAPS);
   start_process();
+  spawn_process("fbd");
+  grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_FB_INFO);
+  start_process();
   spawn_process("kbdd");
   grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_CAPS);
   grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
