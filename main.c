@@ -1,3 +1,4 @@
+#include <__/syscall.h>
 #include <capability.h>
 #include <spawn.h>
 #include <unistd.h>
@@ -11,6 +12,10 @@ int main(void) {
   start_process();
   spawn_process("fbd");
   grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_FB_INFO);
+  uintptr_t fb_phys_addr = _syscall(_SYSCALL_GET_FB_INFO, 0, 0, 0, 0, 0);
+  size_t height = _syscall(_SYSCALL_GET_FB_INFO, 2, 0, 0, 0, 0);
+  size_t pitch = _syscall(_SYSCALL_GET_FB_INFO, 3, 0, 0, 0, 0);
+  map_memory(fb_phys_addr, height * pitch);
   start_process();
   spawn_process("kbdd");
   grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_CAPS);
