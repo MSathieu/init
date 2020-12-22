@@ -11,6 +11,7 @@ int main(void) {
   grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_CAPS);
   start_process();
   spawn_process("fbd");
+  grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
   grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_FB_INFO);
   uintptr_t fb_phys_addr = _syscall(_SYSCALL_GET_FB_INFO, 0, 0, 0, 0, 0);
   size_t height = _syscall(_SYSCALL_GET_FB_INFO, 2, 0, 0, 0, 0);
