@@ -28,4 +28,7 @@ int main(void) {
   grant_ioport(0x64);
   register_irq(1);
   start_process();
+  spawn_process("ttyd");
+  grant_capability(CAP_NAMESPACE_DRIVERS, CAP_FBD_WRITE);
+  start_process();
 }
