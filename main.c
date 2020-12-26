@@ -30,7 +30,6 @@ int main(void) {
   register_irq(1);
   start_process();
   spawn_process("ttyd");
-  grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_FB_INFO);
   grant_capability(CAP_NAMESPACE_DRIVERS, CAP_FBD_DRAW);
   start_process();
 }
