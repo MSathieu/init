@@ -8,10 +8,8 @@ int main(void) {
     return 1;
   }
   spawn_process("ipcd");
-  grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_CAPS);
   start_process();
   spawn_process("fbd");
-  grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_CAPS);
   grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_FB_INFO);
   grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
   uintptr_t fb_phys_addr = _syscall(_SYSCALL_GET_FB_INFO, 0, 0, 0, 0, 0);
@@ -20,8 +18,8 @@ int main(void) {
   map_memory(fb_phys_addr, height * pitch);
   start_process();
   spawn_process("kbdd");
-  grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_CAPS);
   grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
+  grant_capability(CAP_NAMESPACE_SERVERS, CAP_KBDD);
   start_process();
   spawn_process("ps2d");
   grant_capability(CAP_NAMESPACE_SERVERS, CAP_KBDD_SEND_KEYPRESS);
@@ -31,5 +29,6 @@ int main(void) {
   start_process();
   spawn_process("ttyd");
   grant_capability(CAP_NAMESPACE_DRIVERS, CAP_FBD_DRAW);
+  grant_capability(CAP_NAMESPACE_SERVERS, CAP_KBDD_RECEIVE_EVENTS);
   start_process();
 }
