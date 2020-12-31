@@ -6,7 +6,7 @@ OFILES:=$(patsubst %.c, %.o, $(CFILES))
 
 all: init
 init: $(OFILES)
-	$(CC) -o init $(OFILES)
+	$(CC) -s -o init $(OFILES)
 install: all
 	mkdir -p $(DESTDIR)/boot
 	cp init $(DESTDIR)/boot
