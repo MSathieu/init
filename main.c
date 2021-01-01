@@ -10,7 +10,7 @@ struct process {
   pid_t pid;
 };
 
-static struct process processes[] = {{"ipcd", 0}, {"fbd", 0}, {"kbdd", 0}, {"ps2d", 0}, {"ttyd", 0}};
+static struct process processes[] = {{"argd", 0}, {"ipcd", 0}, {"fbd", 0}, {"kbdd", 0}, {"ps2d", 0}, {"ttyd", 0}};
 
 static void spawn(const char* name) {
   for (size_t i = 0; i < sizeof(processes) / sizeof(struct process); i++) {
@@ -19,7 +19,9 @@ static void spawn(const char* name) {
       break;
     }
   }
-  if (!strcmp(name, "fbd")) {
+  if (!strcmp(name, "argd")) {
+    grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
+  } else if (!strcmp(name, "fbd")) {
     grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_FB_INFO);
     grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
     uintptr_t fb_phys_addr = _syscall(_SYSCALL_GET_FB_INFO, 0, 0, 0, 0, 0);
@@ -36,6 +38,7 @@ static void spawn(const char* name) {
     register_irq(1);
   } else if (!strcmp(name, "ttyd")) {
     grant_capability(CAP_NAMESPACE_DRIVERS, CAP_FBD_DRAW);
+    grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
     grant_capability(CAP_NAMESPACE_SERVERS, CAP_KBDD_RECEIVE_EVENTS);
   }
   start_process();
@@ -45,6 +48,7 @@ int main(void) {
     return 1;
   }
   spawn("ipcd");
+  spawn("argd");
   spawn("fbd");
   spawn("kbdd");
   spawn("ps2d");
