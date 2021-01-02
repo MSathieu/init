@@ -27,7 +27,7 @@ static void spawn(const char* name) {
     uintptr_t fb_phys_addr = _syscall(_SYSCALL_GET_FB_INFO, 0, 0, 0, 0, 0);
     size_t height = _syscall(_SYSCALL_GET_FB_INFO, 2, 0, 0, 0, 0);
     size_t pitch = _syscall(_SYSCALL_GET_FB_INFO, 3, 0, 0, 0, 0);
-    map_memory(fb_phys_addr, height * pitch);
+    map_physical_memory(fb_phys_addr, height * pitch);
   } else if (!strcmp(name, "kbdd")) {
     grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
     grant_capability(CAP_NAMESPACE_SERVERS, CAP_KBDD);
