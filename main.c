@@ -22,7 +22,6 @@ static void spawn(const char* name) {
   if (!strcmp(name, "argd")) {
     grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
   } else if (!strcmp(name, "atad")) {
-    grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
     for (size_t i = 0; i < 8; i++) {
       grant_ioport(0x1f0 + i);
       grant_ioport(0x170 + i);
