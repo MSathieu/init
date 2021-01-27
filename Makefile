@@ -8,8 +8,8 @@ all: init
 init: $(OFILES)
 	$(CC) -s -o init $(OFILES)
 install: all
-	mkdir -p $(DESTDIR_BOOT)/boot
-	cp init $(DESTDIR_BOOT)/boot
+	mkdir -p $(DESTDIR)/boot
+	cp init $(DESTDIR)/boot
 format:
 	clang-format -i $(CFILES)
 clean:
