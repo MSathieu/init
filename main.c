@@ -10,7 +10,7 @@ struct process {
   pid_t pid;
 };
 
-static struct process processes[] = {{"argd", 0}, {"atad", 0}, {"ipcd", 0}, {"fbd", 0}, {"kbdd", 0}, {"ps2d", 0}, {"ttyd", 0}};
+static struct process processes[] = {{"argd", 0}, {"atad", 0}, {"ipcd", 0}, {"fbd", 0}, {"kbdd", 0}, {"ps2d", 0}, {"ttyd", 0}, {"vfsd", 0}};
 
 static void spawn(const char* name) {
   for (size_t i = 0; i < sizeof(processes) / sizeof(struct process); i++) {
@@ -49,6 +49,8 @@ static void spawn(const char* name) {
     grant_capability(CAP_NAMESPACE_DRIVERS, CAP_FBD_DRAW);
     grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
     grant_capability(CAP_NAMESPACE_SERVERS, CAP_KBDD_RECEIVE_EVENTS);
+  } else if (!strcmp(name, "vfsd")) {
+    grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
   }
   start_process();
 }
@@ -58,6 +60,7 @@ int main(void) {
   }
   spawn("ipcd");
   spawn("argd");
+  spawn("vfsd");
   spawn("atad");
   spawn("fbd");
   spawn("kbdd");
