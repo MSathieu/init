@@ -30,6 +30,7 @@ static void spawn(const char* name) {
     grant_ioport(0x376);
     register_irq(14);
     register_irq(15);
+    grant_capability(CAP_NAMESPACE_FILESYSTEMS, CAP_VFSD_SVFS);
   } else if (!strcmp(name, "fbd")) {
     grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_FB_INFO);
     grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
