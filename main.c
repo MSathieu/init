@@ -12,7 +12,7 @@ struct process {
   pid_t pid;
 };
 
-static struct process processes[] = {{"argd", 1, 0}, {"atad", 1, 0}, {"ipcd", 1, 0}, {"sbin/fbd", 0, 0}, {"sbin/kbdd", 0, 0}, {"sbin/ps2d", 0, 0}, {"sbin/ttyd", 0, 0}, {"vfsd", 1, 0}};
+static struct process processes[] = {{"argd", 1, 0}, {"atad", 1, 0}, {"ipcd", 1, 0}, {"sbin/envd", 0, 0}, {"sbin/fbd", 0, 0}, {"sbin/kbdd", 0, 0}, {"sbin/ps2d", 0, 0}, {"sbin/ttyd", 0, 0}, {"vfsd", 1, 0}};
 
 static void spawn(const char* name) {
   for (size_t i = 0; i < sizeof(processes) / sizeof(struct process); i++) {
@@ -37,6 +37,8 @@ static void spawn(const char* name) {
     register_irq(14);
     register_irq(15);
     grant_capability(CAP_NAMESPACE_FILESYSTEMS, CAP_VFSD_SVFS);
+  } else if (!strcmp(name, "sbin/envd")) {
+    grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
   } else if (!strcmp(name, "sbin/fbd")) {
     grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_GET_FB_INFO);
     grant_capability(CAP_NAMESPACE_SERVERS, CAP_IPCD_REGISTER);
@@ -69,6 +71,7 @@ int main(void) {
   spawn("argd");
   spawn("vfsd");
   spawn("atad");
+  spawn("sbin/envd");
   spawn("sbin/fbd");
   spawn("sbin/kbdd");
   spawn("sbin/ps2d");
