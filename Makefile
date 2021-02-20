@@ -1,5 +1,5 @@
 CC:=x86_64-os-gcc
-CFLAGS:=-Wall -Wextra -Werror -O2
+CFLAGS+=-Wall -Wextra -Werror -O2
 
 CFILES:=main.c
 OFILES:=$(patsubst %.c, %.o, $(CFILES))
