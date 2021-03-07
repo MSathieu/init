@@ -14,7 +14,7 @@ struct process {
   pid_t pid;
 };
 
-static struct process processes[] = {{"argd", 1, 0}, {"atad", 1, 0}, {"ipcd", 1, 0}, {"/sbin/envd", 0, 0}, {"/sbin/fbd", 0, 0}, {"/sbin/kbdd", 0, 0}, {"/sbin/ps2d", 0, 0}, {"/sbin/ttyd", 0, 0}, {"vfsd", 1, 0}};
+static struct process processes[] = {{"argd", 1, 0}, {"atad", 1, 0}, {"ipcd", 1, 0}, {"/sbin/envd", 0, 0}, {"/sbin/fbd", 0, 0}, {"/sbin/kbdd", 0, 0}, {"/sbin/logd", 0, 0}, {"/sbin/ps2d", 0, 0}, {"/sbin/ttyd", 0, 0}, {"vfsd", 1, 0}};
 
 static void spawn(const char* name) {
   for (size_t i = 0; i < sizeof(processes) / sizeof(struct process); i++) {
@@ -40,7 +40,7 @@ static void spawn(const char* name) {
     grant_ioport(0x376);
     register_irq(14);
     register_irq(15);
-    grant_capability(CAP_NAMESPACE_FILESYSTEMS, CAP_VFSD_SVFS);
+    grant_capability(CAP_NAMESPACE_FILESYSTEMS, CAP_VFSD_MOUNT);
   } else if (!strcmp(name, "ipcd")) {
     grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_PRIORITY);
   } else if (!strcmp(name, "/sbin/envd")) {
@@ -58,6 +58,10 @@ static void spawn(const char* name) {
     register_ipc_name("kbdd");
     grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_PRIORITY);
     grant_capability(CAP_NAMESPACE_SERVERS, CAP_KBDD);
+  } else if (!strcmp(name, "/sbin/logd")) {
+    register_ipc_name("logd");
+    grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_PRIORITY);
+    grant_capability(CAP_NAMESPACE_SERVERS, CAP_TTYD_LOG);
   } else if (!strcmp(name, "/sbin/ps2d")) {
     grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_PRIORITY);
     grant_capability(CAP_NAMESPACE_SERVERS, CAP_KBDD_SEND_KEYPRESS);
@@ -86,8 +90,9 @@ int main(void) {
   spawn("/sbin/envd");
   spawn("/sbin/fbd");
   spawn("/sbin/kbdd");
-  spawn("/sbin/ps2d");
   spawn("/sbin/ttyd");
+  spawn("/sbin/logd");
+  spawn("/sbin/ps2d");
   while (1) {
     pid_t pid = wait(0);
     for (size_t i = 0; i < sizeof(processes) / sizeof(struct process); i++) {
