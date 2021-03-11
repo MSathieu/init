@@ -77,6 +77,7 @@ static void spawn(const char* name) {
   } else if (!strcmp(name, "vfsd")) {
     register_ipc_name("vfsd");
     grant_capability(CAP_NAMESPACE_KERNEL, CAP_KERNEL_PRIORITY);
+    grant_capability(CAP_NAMESPACE_FILESYSTEMS, CAP_VFSD);
   }
   start_process();
 }
